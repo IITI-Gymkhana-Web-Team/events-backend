@@ -1,0 +1,26 @@
+{
+    "size": 3,
+    "events": [
+        {
+            "title": "TItle of event",
+            "description": "Short description of the event",
+            "details": "More details about the event",
+            "date-of-event": "Date in YYYY-MM-DD format",
+            "image": "image url of the link"
+        },
+        {
+            "title": "TItle of event",
+            "description": "Short description of the event",
+            "details": "More details about the event",
+            "date-of-event": "Date in YYYY-MM-DD format",
+            "image": "image url of the link"
+        },
+        {
+            "title": "TItle of event",
+            "description": "Short description of the event",
+            "details": "More details about the event",
+            "date-of-event": "Date in YYYY-MM-DD format",
+            "image": "image url of the link"
+        }, 
+    ]
+}
