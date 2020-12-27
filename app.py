@@ -1,4 +1,4 @@
-from flask import Flask, make_response, jsonify, render_template, request
+from flask import Flask, make_response, jsonify, render_template, request, redirect
 from flask_mysqldb import MySQL
 import MySQLdb
 import yaml
@@ -8,7 +8,7 @@ from test import get_commands
 
 app = Flask(__name__)
 
-env = "dev"
+env = ""
 
 if env == "dev":
     dev = yaml.load(open('db.yaml'), Loader=yaml.FullLoader)
@@ -64,37 +64,7 @@ def get_events(table_name, for_editing=False):
 
 @app.route('/')
 def example():
-    response_body = {
-        "size": 3,
-        "events": [
-            {
-                "id": 1,
-                "title": "TItle of event",
-                "description": "Short description of the event",
-                "details": "More details about the event",
-                "date-of-event": "Date in YYYY-MM-DD format",
-                "image": "image url of the link"
-            },
-            {
-                "id": 2,
-                "title": "TItle of event",
-                "description": "Short description of the event",
-                "details": "More details about the event",
-                "date-of-event": "Date in YYYY-MM-DD format",
-                "image": "image url of the link"
-            },
-            {
-                "id": 3,
-                "title": "TItle of event",
-                "description": "Short description of the event",
-                "details": "More details about the event",
-                "date-of-event": "Date in YYYY-MM-DD format",
-                "image": "image url of the link"
-            },
-        ]
-    }
-    res = make_response(jsonify(response_body), 200)
-    return res
+    return render_template('details.html')
 
 
 @app.route('/past')
@@ -142,7 +112,7 @@ def update():
         mysql.connection.commit()
         cur.close()
 
-        return "Successfully Updated"
+        return redirect('/')
     else:
         return "Incorrect Password"
 
@@ -180,7 +150,7 @@ def delete(table, id):
             cur.execute("DELETE FROM {} WHERE ID={}".format(table, id))
             mysql.connection.commit()
             cur.close()
-            return "DELETED EVENT"
+            return redirect('/')
         else:
             return "INCORRECT PASSWORD"
 
