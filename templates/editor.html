@@ -22,7 +22,7 @@
                 <input name="table_name" value="{{table_name}}" hidden>
             </div>
             {% for i in range(size) %}
-            <hr>
+            <hr class="mt-5 pt-5">
             <div class="form-group">
                 <label>Title </label>
                 <input name="{{'title-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{events[i]['title']}}">
@@ -43,7 +43,7 @@
                 <label>Image Link </label>
                 <input name="{{'image-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{ events[i]['image']}}">
             </div>
-
+            <a href="/delete/{{table_name}}/{{events[i]['id']}}" class="btn btn-danger">DELETE</a>
             <hr> {% endfor %}
             <div class="form-group">
                 <label>PASSWORD </label>

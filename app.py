@@ -8,7 +8,7 @@ from test import get_commands
 
 app = Flask(__name__)
 
-env = ""
+env = "dev"
 
 if env == "dev":
     dev = yaml.load(open('db.yaml'), Loader=yaml.FullLoader)
@@ -145,6 +145,44 @@ def update():
         return "Successfully Updated"
     else:
         return "Incorrect Password"
+
+
+@app.route("/new", methods=['GET', 'POST'])
+def new():
+    if request.method == 'GET':
+        return render_template("new.html")
+    else:
+        data = request.form.to_dict()
+        if(data['password'] == PASSWORD):
+            print(data)
+            table_name = data['event'] + "_events"
+
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO {} VALUES (NULL, '{}', '{}', '{}', '{}', '{}');".format(
+                table_name, data['title'], data['description'], data['details'], data['date'], data['image']))
+            mysql.connection.commit()
+            cur.close()
+            return "New Event Created"
+
+        else:
+            return "Incorrect Password"
+
+
+@app.route('/delete/<table>/<id>', methods=['GET', 'POST'])
+def delete(table, id):
+    if request.method == 'GET':
+        return render_template("verify.html", table_name=table, id=id)
+    else:
+        data = request.form.to_dict()
+        if(data['password'] == PASSWORD):
+
+            cur = mysql.connection.cursor()
+            cur.execute("DELETE FROM {} WHERE ID={}".format(table, id))
+            mysql.connection.commit()
+            cur.close()
+            return "DELETED EVENT"
+        else:
+            return "INCORRECT PASSWORD"
 
 
 if __name__ == "__main__":

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Event</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <form class="jumbotron" action="/new" method="POST">
+            <h1 class="text-center">NEW EVENT</h1>
+            <div class="form-group">
+                <label>Type Of Event </label>
+                <select name="event">
+                    <option value="past">PAST EVENT</option>
+                    <option value="ongoing">ONGOING EVENT</option>
+                    <option value="upcoming">UPCOMING EVENT</option>
+                </select>
+            </div>
+
+            <hr>
+            <div class="form-group">
+                <label>Title </label>
+                <input name="title" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Description </label>
+                <input name="description" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Details </label>
+                <input name="details" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Date </label>
+                <input name="date" type="text" class="form-control" placeholder="YYYY-MM-DD">
+            </div>
+            <div class="form-group">
+                <label>Image Link </label>
+                <input name="image" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>PASSWORD </label>
+                <input name="password" type="password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+
+</html>
