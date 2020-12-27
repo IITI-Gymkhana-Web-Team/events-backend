@@ -48,7 +48,8 @@ def get_events(table_name, for_editing=False):
             "description": i[2],
             "details": i[3],
             "date-of-event": i[4],
-            "image": i[5]
+            "image": i[5],
+            "club": i[6]
         }
         event_list.append(obj)
     response_body = {
@@ -128,8 +129,8 @@ def new():
             table_name = data['event'] + "_events"
 
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO {} VALUES (NULL, '{}', '{}', '{}', '{}', '{}');".format(
-                table_name, data['title'], data['description'], data['details'], data['date'], data['image']))
+            cur.execute("INSERT INTO {} VALUES (NULL, '{}', '{}', '{}', '{}', '{}', '{}');".format(
+                table_name, data['title'], data['description'], data['details'], data['date'], data['image'], data['club']))
             mysql.connection.commit()
             cur.close()
             return "New Event Created"
