@@ -2,6 +2,7 @@
     "size": 3,
     "events": [
         {
+            "id": 1,
             "title": "TItle of event",
             "description": "Short description of the event",
             "details": "More details about the event",
@@ -9,6 +10,7 @@
             "image": "image url of the link"
         },
         {
+            "id": 2,
             "title": "TItle of event",
             "description": "Short description of the event",
             "details": "More details about the event",
@@ -16,6 +18,7 @@
             "image": "image url of the link"
         },
         {
+            "id": 3,
             "title": "TItle of event",
             "description": "Short description of the event",
             "details": "More details about the event",

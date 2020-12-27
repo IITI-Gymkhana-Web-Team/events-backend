@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<style>
+
+</style>
+
+<body>
+
+
+    <div class="container mt-5">
+        <form class="jumbotron" action="/update" method="POST">
+            <h1 class="text-center">{{event_time}} Events</h1>
+            <div class="form-group">
+                <input name="table_name" value="{{table_name}}" hidden>
+            </div>
+            {% for i in range(size) %}
+            <hr>
+            <div class="form-group">
+                <label>Title </label>
+                <input name="{{'title-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{events[i]['title']}}">
+            </div>
+            <div class="form-group">
+                <label>Description </label>
+                <input name="{{'description-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{ events[i]['description']}}">
+            </div>
+            <div class="form-group">
+                <label>Details </label>
+                <input name="{{'details-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{ events[i]['details']}}">
+            </div>
+            <div class="form-group">
+                <label>Date </label>
+                <input name="{{'date-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{ events[i]['date-of-event']}}">
+            </div>
+            <div class="form-group">
+                <label>Image Link </label>
+                <input name="{{'image-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{ events[i]['image']}}">
+            </div>
+
+            <hr> {% endfor %}
+            <div class="form-group">
+                <label>PASSWORD </label>
+                <input name="password" type="password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+</body>
+
+
+</html>
