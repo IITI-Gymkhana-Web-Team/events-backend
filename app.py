@@ -8,7 +8,7 @@ from test import get_commands
 
 app = Flask(__name__)
 
-env = "dev"
+env = ""
 
 if env == "dev":
     dev = yaml.load(open('db.yaml'), Loader=yaml.FullLoader)
