@@ -1,5 +1,6 @@
 from flask import Flask, make_response, jsonify, render_template, request, redirect
 from flask_mysqldb import MySQL
+from flask_cors import CORS, cross_origin
 import MySQLdb
 import yaml
 import os
@@ -7,6 +8,8 @@ from dbConfig import database_config
 from test import get_commands
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 env = ""
 
@@ -69,16 +72,19 @@ def example():
 
 
 @app.route('/past')
+@cross_origin()
 def past():
     return get_events("past_events")
 
 
 @app.route('/ongoing')
+@cross_origin()
 def ongoing():
     return get_events('ongoing_events')
 
 
 @app.route('/upcoming')
+@cross_origin()
 def upcoming():
     return get_events('upcoming_events')
 
