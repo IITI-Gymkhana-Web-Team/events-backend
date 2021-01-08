@@ -11,7 +11,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-env = "dev"
+env = ""
 
 if env == "dev":
     dev = yaml.load(open('db.yaml'), Loader=yaml.FullLoader)
