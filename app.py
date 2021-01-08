@@ -39,24 +39,33 @@ else:
 
 def get_events(table_name, for_editing=False):
     cur = mysql.connection.cursor()
-    cur.execute('select * from ' + table_name + ';')
+    cur.execute('select * from ALL_EVENTS;')
     events = cur.fetchall()
-    print(len(events))
+
+    check = -2
+    if table_name == 'past_events':
+        check = -1
+    elif table_name == 'ongoing_events':
+        check = 0
+    else:
+        check = 1
 
     event_list = []
     for i in events:
-        obj = {
-            "id": i[0],
-            "title": i[1],
-            "description": i[2],
-            "details": i[3],
-            "date-of-event": i[4],
-            "image": i[5],
-            "club": i[6]
-        }
-        event_list.append(obj)
+        if(i[7] == check):
+            obj = {
+                "id": i[0],
+                "title": i[1],
+                "description": i[2],
+                "details": i[3],
+                "date-of-event": i[4],
+                "image": i[5],
+                "club": i[6],
+                "status": i[7]
+            }
+            event_list.append(obj)
     response_body = {
-        "size": len(events),
+        "size": len(event_list),
         "events": event_list
     }
     if(for_editing == True):
