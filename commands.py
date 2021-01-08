@@ -5,28 +5,37 @@ def get_commands(data):
     print(data)
     #  Example -------
     # {
-    #     "32": ["title", "description", "details", "20-11-10", "image_url", "club-name"],
-    #     "12": ["title", "description", "details", "20-11-10", "image_url", "club-name"]
+    #
+    #    "status-1":"-1",
+    #    "title-1":"Past Event 1",
+    #    "description-1":"This is some text",
+    #    "details-1":"This is more text for wider card Lorem Lorem Lorem Lorem",
+    #    "date-1":"2021-01-08",
+    #    "image-1":"https://picsum.photos/200/500",
+    #    "club-1":"Web Dev Team"
     # }
-    # obj = {}
-    # for item in x:
-    #     if '-' in item:
-    #         [data, id] = item.split('-')
-    #         if id not in obj:
-    #             obj[id] = [0, 0, 0, 0, 0, 0]
-    #         if(data == 'title'):
-    #             obj[id][0] = x[item]
-    #         if(data == 'description'):
-    #             obj[id][1] = x[item]
-    #         if(data == 'details'):
-    #             obj[id][2] = x[item]
-    #         if(data == 'date'):
-    #             obj[id][3] = x[item]
-    #         if(data == 'image'):
-    #             obj[id][4] = x[item]
-    #         if(data == 'club'):
-    #             obj[id][5] = x[item]
-    #         # print("UPDATE TABLE SET {} = '{}' WHERE ID = {};".format(data,x[item], id))
+    obj = {}
+    for item in data:
+        if '-' in item:
+            [data, id] = item.split('-')
+            if id not in obj:
+                obj[id] = [0, 0, 0, 0, 0, 0, 0]
+            if(data == 'title'):
+                obj[id][0] = data[item]
+            if(data == 'description'):
+                obj[id][1] = data[item]
+            if(data == 'details'):
+                obj[id][2] = data[item]
+            if(data == 'date'):
+                obj[id][3] = data[item]
+            if(data == 'image'):
+                obj[id][4] = data[item]
+            if(data == 'club'):
+                obj[id][5] = data[item]
+            if(data == 'status'):
+                obj[id][6] = data[item]
+            print("UPDATE TABLE SET {} = '{}' WHERE ID = {};".format(
+                data, data[item], id))
     # cols = ['title', 'description', 'details',
     #         'date_of_event', 'image', 'club']
     # commands = []

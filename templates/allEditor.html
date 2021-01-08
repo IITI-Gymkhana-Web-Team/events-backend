@@ -28,6 +28,10 @@
             {% for i in range(size) %}
             <hr class="mt-5 pt-5">
             <div class="form-group">
+                <input name="{{'status-{}'.format(events[i]['id'])}}" value="{{events[i]['status']}}" hidden>
+            </div>
+
+            <div class="form-group">
                 <label>Title </label>
                 <input name="{{'title-{}'.format(events[i]['id'])}}" type="text" class="form-control" value="{{events[i]['title']}}">
             </div>
