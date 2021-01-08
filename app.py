@@ -139,9 +139,39 @@ def new():
 
 @app.route("/edit", methods=['GET', 'POST'])
 def edit():
+
     res = get_events('', True)
+    events = res['events']
+    size = res['size']
+
     if request.method == 'GET':
-        return render_template('allEditor.html', events=res['events'], size=res['size'])
+        if(request.args):
+            title = request.args.get('title')
+            fromTitle = []
+            club = request.args.get('club')
+            fromClub = []
+            if(title):
+                for event in events:
+                    title = title.lower()
+                    if title in event['title'].lower():
+                        fromTitle.append(event)
+
+            if(club):
+                for event in events:
+                    club = club.lower()
+                    if club in event['club'].lower():
+                        fromClub.append(event)
+
+            events = fromTitle
+            for item in fromClub:
+                present = False
+                for event in events:
+                    if(event['id'] == item['id']):
+                        present = True
+                if(not present):
+                    events.append(item)
+            size = len(events)
+        return render_template('allEditor.html', events=events, size=size)
 
     else:
         data = request.form.to_dict()
@@ -165,6 +195,23 @@ def edit():
             return "Incorrect Password"
 
         return 'POST'
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'GET':
+        return render_template('search.html')
+    else:
+        data = request.form.to_dict()
+        title = data['title']
+        club = data['club']
+
+        expression = "?"
+        if(title):
+            expression += 'title=' + title + '&'
+        if(club):
+            expression += 'club=' + club + '&'
+        return redirect('/edit' + expression)
 
 
 @app.route('/delete/<id>', methods=['GET', 'POST'])
