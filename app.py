@@ -5,7 +5,7 @@ import MySQLdb
 import yaml
 import os
 from dbConfig import database_config
-from test import get_commands
+from commands import get_commands
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -37,7 +37,7 @@ else:
     app.SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
-def get_events(table_name, for_editing=False):
+def get_events(table_name='', for_editing=False):
     cur = mysql.connection.cursor()
     cur.execute('select * from ALL_EVENTS;')
     events = cur.fetchall()
@@ -45,14 +45,25 @@ def get_events(table_name, for_editing=False):
     check = -2
     if table_name == 'past_events':
         check = -1
-    elif table_name == 'ongoing_events':
+    if table_name == 'ongoing_events':
         check = 0
-    else:
+    if table_name == 'upcoming_events':
         check = 1
 
     event_list = []
     for i in events:
         if(i[7] == check):
+            obj = {
+                "id": i[0],
+                "title": i[1],
+                "description": i[2],
+                "details": i[3],
+                "date-of-event": i[4],
+                "image": i[5],
+                "club": i[6],
+            }
+            event_list.append(obj)
+        else:
             obj = {
                 "id": i[0],
                 "title": i[1],
@@ -98,41 +109,6 @@ def upcoming():
     return get_events('upcoming_events')
 
 
-@app.route('/<event_time>/edit')
-def edit(event_time):
-    if(event_time == "past" or event_time == "ongoing" or event_time == "upcoming"):
-        table_name = event_time + "_events"
-        res = get_events(table_name, True)
-        events = res['events']
-        size = res['size']
-        return render_template('editor.html', size=size, events=events, event_time=event_time.capitalize(), table_name=table_name)
-    else:
-        return "Wrong Parameter Supplied"
-
-
-@app.route("/update", methods=['POST'])
-def update():
-    data = request.form.to_dict()
-    if(data['password'] == PASSWORD):
-        commands = get_commands(data, data['table_name'])
-
-        cur = mysql.connection.cursor()
-
-        for i in commands:
-            try:
-                print("Executing: " + i)
-                cur.execute(i)
-            except (MySQLdb.Error, MySQLdb.Warning) as e:
-                print(e)
-
-        mysql.connection.commit()
-        cur.close()
-
-        return redirect('/')
-    else:
-        return "Incorrect Password"
-
-
 @app.route("/new", methods=['GET', 'POST'])
 def new():
     if request.method == 'GET':
@@ -142,16 +118,66 @@ def new():
         if(data['password'] == PASSWORD):
             print(data)
             table_name = data['event'] + "_events"
-
+            if data['event'] == 'past':
+                status = -1
+            elif data['event'] == 'ongoing':
+                status - 0
+            else:
+                status = 1
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO {} VALUES (NULL, '{}', '{}', '{}', '{}', '{}', '{}');".format(
-                table_name, data['title'], data['description'], data['details'], data['date'], data['image'], data['club']))
+            cur.execute("INSERT INTO ALL_EVENTS VALUES (NULL, '{}', '{}', '{}', '{}', '{}', '{}', {});".format(
+                data['title'], data['description'], data['details'], data['date'], data['image'], data['club'], status))
             mysql.connection.commit()
             cur.close()
             return "New Event Created"
 
         else:
             return "Incorrect Password"
+
+
+@app.route("/edit", methods=['GET', 'POST'])
+def edit():
+    res = get_events('', True)
+    if request.method == 'GET':
+        return render_template('allEditor.html', events=res['events'], size=res['size'])
+
+    else:
+        data = request.form.to_dict()
+        print(data)
+        get_commands(data)
+        return 'POST'
+        # @app.route('/<event_time>/edit')
+        # def edit(event_time):
+        #     if(event_time == "past" or event_time == "ongoing" or event_time == "upcoming"):
+        #         table_name = event_time + "_events"
+        #         res = get_events(table_name, True)
+        #         events = res['events']
+        #         size = res['size']
+        #         return render_template('editor.html', size=size, events=events, event_time=event_time.capitalize(), table_name=table_name)
+        #     else:
+        #         return "Wrong Parameter Supplied"
+
+        # @app.route("/update", methods=['POST'])
+        # def update():
+        #     data = request.form.to_dict()
+        #     if(data['password'] == PASSWORD):
+        #         commands = get_commands(data, data['table_name'])
+
+        #         cur = mysql.connection.cursor()
+
+        #         for i in commands:
+        #             try:
+        #                 print("Executing: " + i)
+        #                 cur.execute(i)
+        #             except (MySQLdb.Error, MySQLdb.Warning) as e:
+        #                 print(e)
+
+        #         mysql.connection.commit()
+        #         cur.close()
+
+        #         return redirect('/')
+        #     else:
+        #         return "Incorrect Password"
 
 
 @app.route('/delete/<table>/<id>', methods=['GET', 'POST'])
@@ -163,7 +189,7 @@ def delete(table, id):
         if(data['password'] == PASSWORD):
 
             cur = mysql.connection.cursor()
-            cur.execute("DELETE FROM {} WHERE ID={}".format(table, id))
+            cur.execute("DELETE FROM ALL_EVENTS WHERE ID={}".format(id))
             mysql.connection.commit()
             cur.close()
             return redirect('/')
