@@ -20,11 +20,13 @@
         {% if size == 0 %}
         <div class="jumbotron">
             <h1 class="text-center">Nothing Here</h1>
+            <h5 class="text-center"><a href="/edit">Back</a></h5>
+
         </div>
         {% else %}
         <form class="jumbotron" action="/edit" method="POST">
             <h1 class="text-center">ALL Events</h1>
-
+            <h4 class="text-right"><a href="/search">Find</a></h4>
             {% for i in range(size) %}
             <hr class="mt-5 pt-5">
 
