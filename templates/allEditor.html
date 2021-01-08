@@ -27,8 +27,28 @@
 
             {% for i in range(size) %}
             <hr class="mt-5 pt-5">
+
             <div class="form-group">
-                <input name="{{'status-{}'.format(events[i]['id'])}}" value="{{events[i]['status']}}" hidden>
+                <label>Status </label>
+                <select name="{{'status-{}'.format(events[i]['id'])}}">
+                    {% if events[i]['status'] == -1 %}
+                        <option value="-1" selected>Completed</option>
+                    {% else %}
+                        <option value="-1">Completed</option>
+                    {% endif %}
+
+                    {% if events[i]['status'] == 0 %}
+                        <option value="0" selected>Ongoing</option>
+                    {% else %}
+                        <option value="0">Ongoing</option>
+                    {% endif %}
+
+                    {% if events[i]['status'] == 1 %}
+                        <option value="1" selected>Upcoming</option>
+                    {% else %}
+                        <option value="1">Upcoming</option>
+                    {% endif %}
+                </select>
             </div>
 
             <div class="form-group">
@@ -57,11 +77,14 @@
             </div>
             <a href="/delete/{{events[i]['id']}}" class="btn btn-danger">DELETE</a>
             <hr> {% endfor %}
-            <div class="form0-group">
-                <label>PASSWORD </label>
-                <input name="password" type="password" class="form-control">
+            <div class="position-sticky fixed-bottom container jumbotron " style="background: #519872;">
+                <div class="form-group">
+                    <label>PASSWORD </label>
+                    <input name="password" type="password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+
         </form>
         {% endif %}
 

@@ -51,19 +51,8 @@ def get_events(table_name='', for_editing=False):
         check = 1
 
     event_list = []
-    for i in events:
-        if(i[7] == check):
-            obj = {
-                "id": i[0],
-                "title": i[1],
-                "description": i[2],
-                "details": i[3],
-                "date-of-event": i[4],
-                "image": i[5],
-                "club": i[6],
-            }
-            event_list.append(obj)
-        else:
+    if(for_editing):
+        for i in events:
             obj = {
                 "id": i[0],
                 "title": i[1],
@@ -75,6 +64,20 @@ def get_events(table_name='', for_editing=False):
                 "status": i[7]
             }
             event_list.append(obj)
+    else:
+        for i in events:
+            if(i[7] == check):
+                obj = {
+                    "id": i[0],
+                    "title": i[1],
+                    "description": i[2],
+                    "details": i[3],
+                    "date-of-event": i[4],
+                    "image": i[5],
+                    "club": i[6],
+                }
+                event_list.append(obj)
+
     response_body = {
         "size": len(event_list),
         "events": event_list
@@ -116,12 +119,11 @@ def new():
     else:
         data = request.form.to_dict()
         if(data['password'] == PASSWORD):
-            print(data)
             table_name = data['event'] + "_events"
             if data['event'] == 'past':
                 status = -1
             elif data['event'] == 'ongoing':
-                status - 0
+                status = 0
             else:
                 status = 1
             cur = mysql.connection.cursor()
@@ -143,47 +145,32 @@ def edit():
 
     else:
         data = request.form.to_dict()
-        print(data)
-        get_commands(data)
+        if(data['password'] == PASSWORD):
+            commands = get_commands(data)
+
+            cur = mysql.connection.cursor()
+
+            for i in commands:
+                try:
+                    print("Executing: " + i)
+                    cur.execute(i)
+                except (MySQLdb.Error, MySQLdb.Warning) as e:
+                    print(e)
+
+            mysql.connection.commit()
+            cur.close()
+
+            return redirect('/')
+        else:
+            return "Incorrect Password"
+
         return 'POST'
-        # @app.route('/<event_time>/edit')
-        # def edit(event_time):
-        #     if(event_time == "past" or event_time == "ongoing" or event_time == "upcoming"):
-        #         table_name = event_time + "_events"
-        #         res = get_events(table_name, True)
-        #         events = res['events']
-        #         size = res['size']
-        #         return render_template('editor.html', size=size, events=events, event_time=event_time.capitalize(), table_name=table_name)
-        #     else:
-        #         return "Wrong Parameter Supplied"
-
-        # @app.route("/update", methods=['POST'])
-        # def update():
-        #     data = request.form.to_dict()
-        #     if(data['password'] == PASSWORD):
-        #         commands = get_commands(data, data['table_name'])
-
-        #         cur = mysql.connection.cursor()
-
-        #         for i in commands:
-        #             try:
-        #                 print("Executing: " + i)
-        #                 cur.execute(i)
-        #             except (MySQLdb.Error, MySQLdb.Warning) as e:
-        #                 print(e)
-
-        #         mysql.connection.commit()
-        #         cur.close()
-
-        #         return redirect('/')
-        #     else:
-        #         return "Incorrect Password"
 
 
-@app.route('/delete/<table>/<id>', methods=['GET', 'POST'])
-def delete(table, id):
+@app.route('/delete/<id>', methods=['GET', 'POST'])
+def delete(id):
     if request.method == 'GET':
-        return render_template("verify.html", table_name=table, id=id)
+        return render_template("verify.html", id=id)
     else:
         data = request.form.to_dict()
         if(data['password'] == PASSWORD):
